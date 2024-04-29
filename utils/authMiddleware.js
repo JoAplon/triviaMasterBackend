@@ -12,7 +12,15 @@ const auth = (req, res, next) => {
         req.user = decoded.user;
         next();
     } catch (e) {
-        res.status(400).json({ message: 'Token is not valid' });
+        if (e.name === 'TokenExpiredError') {
+            return res.status(401).json({ message: 'Token expired, please log in again' });
+        }
+        if (e.name === 'JsonWebTokenError') {
+            return res.status(401).json({ message: 'Invalid token, authorization denied' });
+        }
+        // Handle other JWT verification errors
+        console.error('JWT verification error:', e);
+        res.status(500).json({ message: 'Internal server error' });
     }
 };
 
