@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 
-router.get('/difficulty', auth, async (req, res) => {
+router.get('/difficulty', async (req, res) => {
     try {
         const defaultDifficulty = 'Easy';
         res.json({difficultyLevel: defaultDifficulty });

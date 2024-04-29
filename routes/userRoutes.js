@@ -49,12 +49,14 @@ router.post('/login', async (req, res) => {
         if (!user) {
             return res.status(400).json({ msg: 'Invalid Credentials' });
         }
-
+        console.log(password);
+        
         const isMatch = await bcrypt.compare(password, user.password);
+        console.log(isMatch);
         if (!isMatch) {
             return res.status(400).json({ msg: 'Invalid Credentials' });
         }
-
+        
         const payload = {
             user: {
                 id: user.id
@@ -82,5 +84,16 @@ router.get('/me', auth, async (req, res) => {
         res.status(500).send('Server error');
     }
 });
+
+router.get('/', async (req, res) => {
+    try {
+        const users = await User.find();
+        res.json(users);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server error');
+    }
+});
+
 
 module.exports = router;
