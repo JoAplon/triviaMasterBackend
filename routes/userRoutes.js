@@ -30,9 +30,9 @@ router.post('/register', async (req, res) => {
             }
         };
 
-        jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 360000 }, (err, token) => {
+        jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '5h' }, (err, token) => {
             if (err) throw err;
-            res.json({ token });
+            res.json({ token, user: newUser });
         });
     } catch (err) {
         console.error(err.message);
@@ -49,7 +49,7 @@ router.post('/login', async (req, res) => {
         if (!user) {
             return res.status(400).json({ msg: 'Invalid Credentials' });
         }
-        console.log(password);
+        // console.log(password);
         
         const isMatch = await bcrypt.compare(password, user.password);
         console.log(isMatch);
@@ -77,7 +77,7 @@ router.post('/login', async (req, res) => {
 // Get user data using token
 router.get('/me', auth, async (req, res) => {
     try {
-        const user = await User.findById(req.user.id).select('-password');
+        const user = await User.findById(req.user.id);
         res.json(user);
     } catch (err) {
         console.error(err.message);
