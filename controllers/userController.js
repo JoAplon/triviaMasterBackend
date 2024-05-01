@@ -18,6 +18,9 @@ const registerUser = async (req, res) => {
         // Hash the password
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
+        // if (!isPasswordValid) {
+        //     return res.status(400).json({ message: 'Invalid password' });
+        // }
 
         // Create new user
         const newUser = new User({
@@ -30,7 +33,7 @@ const registerUser = async (req, res) => {
         await newUser.save();
 
         // Generate JWT token
-        const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, { expiresIn: '5h' });
 
         // Send token in response
         res.json({ token });
