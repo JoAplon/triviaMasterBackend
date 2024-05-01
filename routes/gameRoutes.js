@@ -4,8 +4,33 @@ const axios = require('axios');
 const router = express.Router();
 const { getTriviaQuestions } = require('../utils/triviaAPI');
 const User = require('../models/User');
+const auth = require('../utils/authMiddleware');
 
 // Add routes for starting a game, fetching questions from the API, and saving game results
+
+// Example route to save a game to a user's profile
+router.post('/save-game', auth, async (req, res) => {
+    const userId = req.user.id; // Get user ID from authentication middleware
+    const { questions, difficulty, category } = req.body; // Extract game data from request body
+
+    try {
+        // Save the game data to the database, associating it with the user's ID
+        const game = new Game({
+            userId,
+            questions,
+            difficulty,
+            category
+        });
+
+        await game.save();
+
+        res.status(201).json({ message: 'Game saved successfully' });
+    } catch (error) {
+        console.error('Error saving game:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 
 // Route to start a new game
 router.post('/start', async (req, res) => {
