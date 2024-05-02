@@ -74,7 +74,7 @@ const loginUser = async (req, res) => {
 // Controller function for fetching user data
 const getUserData = async (req, res) => {
     const userId = req.user.userId;
-
+    console.log('User', userId);
     try {
         // Fetch user data from database
         const user = await User.findById(userId);
