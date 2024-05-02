@@ -74,10 +74,12 @@ console.log('Request Body:', req.body);
 // Get user data using token
 router.get('/me', auth, async (req, res) => {
     try {
+        console.log('user.id', req.user.id);
         const user = await User.findById(req.user.id);
+        console.log('User data:', user);
         res.json(user);
     } catch (err) {
-        console.error(err.message);
+        console.log(err.message);
         res.status(500).send('Server error');
     }
 });
@@ -91,6 +93,8 @@ router.get('/', async (req, res) => {
         res.status(500).send('Server error');
     }
 });
+
+
 
 
 module.exports = router;
