@@ -20,6 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/users', userRoutes);
 app.use('/api/games', gameRoutes);
 
+
 // app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 connectDB.once('open', () => {
