@@ -10,7 +10,7 @@ const auth = require('../utils/authMiddleware');
 
 // Example route to save a game to a user's profile
 router.post('/save-game', auth, async (req, res) => {
-    const userId = req.user.id; // Get user ID from authentication middleware
+    const userId = req.user._id; // Get user ID from authentication middleware
     const { questions, difficulty, category } = req.body; // Extract game data from request body
 
     try {
@@ -32,36 +32,36 @@ router.post('/save-game', auth, async (req, res) => {
 });
 
 
-// Route to start a new game
-router.post('/start', async (req, res) => {
-    try {
-        const { userId, category, difficulty } = req.body;
-        console.log('Received request to start a new game:');
+// // Route to start a new game
+// router.post('/start', async (req, res) => {
+//     try {
+//         const { userId, category, difficulty } = req.body;
+//         console.log('Received request to start a new game:');
 
 
-        const newGame = await Game.create({
-            userId,
-            category,
-            difficulty,
-            startTime: Date.now(),
-            score: 0,
-        });
+//         const newGame = await Game.create({
+//             userId,
+//             category,
+//             difficulty,
+//             startTime: Date.now(),
+//             score: 0,
+//         });
 
-        res.status(200).json({ message: 'Game started successfully', gameId: newGame._id });
-    } catch (error) {
-        console.error('Error starting a new game:', error);
-        res.status(500).json({ message: 'Internal Server Error' });
-    }
-});
+//         res.status(200).json({ message: 'Game started successfully', gameId: newGame._id });
+//     } catch (error) {
+//         console.error('Error starting a new game:', error);
+//         res.status(500).json({ message: 'Internal Server Error' });
+//     }
+// });
 
-router.get('/questions', async (req, res) => {
-    try {
-        const questions = await getTriviaQuestions();
-        res.json(questions);
-    } catch (error) {
-        res.status(500), json({ message: 'Internal Server Error' });
-    }
-});
+// router.get('/questions', async (req, res) => {
+//     try {
+//         const questions = await getTriviaQuestions();
+//         res.json(questions);
+//     } catch (error) {
+//         res.status(500), json({ message: 'Internal Server Error' });
+//     }
+// });
 
 router.get('/categories', async (req, res) => {
     try {
@@ -76,13 +76,14 @@ router.get('/categories', async (req, res) => {
 router.post('/results', async (req, res) => {
     try {
         const { userId, category, difficulty, questions } = req.body;
-
+        console.log(req.body);
         const user = await User.findById(userId);
+        console.log(user);
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        const newGame = await Game.create({ userId, category, difficulty, questions });
+        const newGame = await Game.create({ user_id: userId, category, difficulty, questions });
 
         user.games.push(newGame._id);
         await user.save();
