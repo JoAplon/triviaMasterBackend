@@ -75,7 +75,7 @@ console.log('Request Body:', req.body);
 router.get('/me', auth, async (req, res) => {
     try {
         console.log('user.id', req.user.id);
-        const user = await User.findById(req.user.id);
+        const user = await User.findById(req.user.id).populate('games');
         console.log('User data:', user);
         res.json(user);
     } catch (err) {
