@@ -10,9 +10,8 @@ const gameRoutes = require('./routes/gameRoutes');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-app.use(cors({
-    origin: 'https://triviamasterbackend.onrender.com'
-}));
+app.use(cors());
+app.options("*", cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
