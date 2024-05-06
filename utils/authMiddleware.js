@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 const auth = (req, res, next) => {
     const token = req.header('Authorization') ? req.header('Authorization').replace('Bearer ', '') : null;
-    console.log('Token:', token);
+    // console.log('Token:', token);
 
     if (!token) {
         console.log('No token found');
@@ -11,7 +11,7 @@ const auth = (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        console.log('Decoded token payload:', decoded);
+        // console.log('Decoded token payload:', decoded);
         req.user = decoded;
         // console.log(req.user);
         next();
